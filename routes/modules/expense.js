@@ -3,95 +3,63 @@ const router = express.Router()
 
 const records = require('../../models/record')
 const categories = require('../../models/category')
+
 // 搜尋篩選路由
 router.get('/', (req, res) => {
-  const queryArr = req.query
-  if (!queryArr.sortRule) queryArr.sortRule = 'asc'
-  if (queryArr.clear) queryArr.keyword = ''
-  const word = queryArr.keyword.toLowerCase().trim()
+  const filterTarget = req.query.filterCategory
+  console.log(filterTarget)
   records.find()
     .lean()
-    .sort({ name: queryArr.sortRule })
-    .then(restaurant => {
-      const categoryArr = []
-      const areaArr = []
-      restaurant.forEach(item => {
-        categoryArr.push(item.category)
-        areaArr.push(item.area)
+    .then(record => {
+      let totalAmount = Number()
+      record.forEach(item => {
+        totalAmount += Number(item.amount)
       })
-      const categories = categoryArr.filter((ele, index, thisArr) => {
-        return thisArr.indexOf(ele) === index
+      let filteredRecordArr = record.filter(item => {
+        return item.category === filterTarget
       })
-      const areas = areaArr.filter((ele, index, thisArr) => {
-        return thisArr.indexOf(ele) === index
-      })
-
-      const searchedRestaurant = []
-      restaurant.forEach(item => {
-        if (item.name.toLowerCase().includes(word) || item.category.toLowerCase().includes(word)) {
-          searchedRestaurant.push(item)
-        }
-      })
-
-      const filteredRestaurant = []
-      if (queryArr.filterCategory) {
-        searchedRestaurant.forEach(item => {
-          if (item.category.includes(queryArr.filterCategory)) {
-            filteredRestaurant.push(item)
-          }
+      if (!filteredRecordArr.length) filteredRecordArr = record
+      categories.find()
+        .lean()
+        .then(category => {
+          const newCategory = []
+          category.forEach(item => {
+            newCategory.push(item)
+          })
+          return res.render('index', {
+            record: filteredRecordArr,
+            category: newCategory,
+            totalAmount,
+            filterTarget
+          })
         })
-        searchedRestaurant.length = 0
-        filteredRestaurant.forEach(ele => {
-          searchedRestaurant.push(ele)
-        })
-      } else if (queryArr.filterArea) {
-        searchedRestaurant.forEach(item => {
-          if (item.area.includes(queryArr.filterArea)) {
-            filteredRestaurant.push(item)
-          }
-        })
-        searchedRestaurant.length = 0
-        filteredRestaurant.forEach(ele => {
-          searchedRestaurant.push(ele)
-        })
-      }
-
-      return res.render('index', {
-        restaurant: searchedRestaurant,
-        keywords: word,
-        categories,
-        areas,
-        queryArr
-      })
     })
     .catch(error => console.error(error))
 })
 
 // 新增頁面路由
 router.get('/new', (req, res) => {
-  return res.render('new')
+  categories.find()
+    .lean()
+    .then(category => res.render('new', { category }))
 })
 
 // 新增頁面送出路由
 router.post('/', (req, res) => {
-  const { name, category, date, amount } = req.body
+  let { name, category, date, amount } = req.body
+  if (!name.trim()) name = '未命名的支出'
+  if (!amount.trim()) amount = '0'
+  let categoryArr = []
+  categoryArr = categoryArr.concat(category.split(','))
   return records.create({
     name: name,
-    category: category,
+    category: categoryArr[0],
     date: date,
-    amount: amount
+    amount: amount,
+    tag: categoryArr[1]
   })
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
-})
-
-// 詳細頁面路由
-router.get('/:record_id', (req, res) => {
-  const id = req.params.record_id
-  return records.findById(id)
-    .lean()
-    .then(record => res.render('show', { record }))
-    .catch(error => console.error(error))
 })
 
 // 編輯頁面路由
@@ -99,25 +67,35 @@ router.get('/:record_id/edit', (req, res) => {
   const id = req.params.record_id
   return records.findById(id)
     .lean()
-    .then(record => res.render('edit', { record }))
+    .then(record => {
+      categories.find()
+        .lean().then(categoryItem => {
+          const newCategories = categoryItem.filter(ele => ele.name !== record.category)
+          res.render('edit', { record, categories: newCategories })
+        })
+    })
     .catch(error => console.log(error))
 })
 
 // 編輯頁面送出路由
 router.put('/:record_id', (req, res) => {
   const id = req.params.record_id
-  const { name, category, date, amount } = req.body
-  console.log(req.body)
+  let { name, category, date, amount } = req.body
+  if (!name.trim()) name = '未命名的支出'
+  if (!amount.trim()) amount = '0'
+  let categoryArr = []
+  categoryArr = categoryArr.concat(category.split(','))
   return records.findById(id)
     .then(record => {
       record.name = name
-      record.category = category
+      record.category = categoryArr[0]
       record.date = date
       record.amount = amount
+      record.tag = categoryArr[1]
       return record.save()
     })
     .then(() => {
-      return res.redirect(`/record/${id}`)
+      return res.redirect('/')
     })
     .catch(error => console.error(error))
 })

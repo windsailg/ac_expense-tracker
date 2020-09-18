@@ -2,3 +2,9 @@
     min-width: 70px;
     color: #56b9b4;
 }
+.form-control::placeholder{
+    color:#bad4d2
+}
+.form-control[readonly]{
+    background-color:#ffffff
+}

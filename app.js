@@ -19,8 +19,6 @@ app.engine('hbs', exphbs({
 }))
 app.set('view engine', 'hbs')
 
-
-
 app.listen(port, () => {
   console.log(`Express is running on http://localhost:${port}`)
 })

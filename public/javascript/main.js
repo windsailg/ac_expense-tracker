@@ -1,10 +1,9 @@
-// delete restaurant  function
 document.querySelector('body').addEventListener('click', (e) => {
-  if (e.target.matches('.delete__record__btn')) {
+  if (e.target.matches('.delete__btn')) {
     const id = e.target.dataset.id
     document.delete_form.action = `/record/${id}?_method=DELETE`
   }
-  if (e.target.matches('.delete__record__btn')) {
+  if (e.target.matches('.delete__btn')) {
     const id = e.target.dataset.id
     document.delete_form.action = `/record/${id}?_method=DELETE`
   }

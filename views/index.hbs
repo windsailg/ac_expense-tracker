@@ -1,24 +1,30 @@
 <!-- search bar -->
 <div class="container search-bar mt-5">
 
+
+  <div class="container  mb-5">
+    <p class="lead font-weight-bold">開銷總金額：</p>
+    <h1 class="display-4 text-muted">$ {{totalAmount}}</h1>
+  </div>
+
+
   <form action="/search" class="search__form">
     
     <div class="input-group ">
 
       <div class="dropdown shadow sorter">
         <button class="btn btn-info btn-block dropdown-toggle sorter__text" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          搜尋類別
-          {{!-- {{#if queryArr.filterCategory}}
-            {{queryArr.filterCategory}}
+          {{#if filterTarget}}
+            {{filterTarget}}
             {{else}}
-            類別
-          {{/if}} --}}
+            依照類別搜尋
+          {{/if}}
         </button>
         <div type="submit" class="dropdown-menu" aria-labelledby="dropdownMenu2">
           <button name="filterCategory" value="" class="dropdown-item">選擇開銷類型</button>
           <div class="dropdown-divider"></div>
-          {{#each categories}}
-            <button name="filterCategory" value="{{ this }}" class="dropdown-item">{{ this }}</button>
+          {{#each category}}
+            <button name="filterCategory" value="{{ this.name }}" class="dropdown-item">{{ this.name }}</button>
           {{/each}}
         </div>
       </div>
@@ -29,8 +35,8 @@
 
 </div>
 
-<div class="container mt-5 ">
-  <div class="row mb-5">
+<div class="container mt-3 ">
+  <div class="row mb-4">
     <div class="col-md-12  p-3 mx-auto">
 
         <ul class="list-group">
@@ -43,7 +49,7 @@
               <div class="row col-10 mr-auto align-items-center">
 
                 <div class="row col-md-9">
-                  <h3 class="col-auto pl-3 pt-2 imagine text-center text-info ">
+                  <h3 class="col-auto pl-3 pt-2 imagine text-center text-info " title="{{this.category}}">
                     <i class="{{this.tag}}"></i>
                   </h3>
                   <div class="col-md-8">
@@ -59,13 +65,12 @@
               </div>
 
               <div class="col-auto mt-2 mb-2">
-                <a type="button" href="./record/{{this._id}}/edit" class="btn btn-warning btn-sm  shadow-sm">修改</a>
-                <button type="button" class="btn btn-outline-secondary btn-sm delete__record__btn shadow-sm" data-toggle="modal" data-target="#ModalDelete" data-id="{{this._id}}">刪除</button>
+                <a type="button" href="./record/{{this._id}}/edit" class="btn btn-warning btn-sm  shadow-sm">編輯</a>
+                <button type="button" class="btn btn-link text-danger btn-sm delete__btn" data-toggle="modal" data-target="#ModalDelete" data-id="{{this._id}}">刪除</button>
               </div>
 
             </div>
           </li>
-
 
         {{/each}}
         </ul>
@@ -75,7 +80,7 @@
 
   <div class="row">
     <div class="col-md-12  mx-auto">
-       <a type="button" href="/record/new" class="btn btn-secondary btn-lg btn-block"><i class="far fa-plus-square"></i> 新增支出</a>
+       <a type="button" href="/record/new" class="btn btn-secondary btn-lg btn-block shadow"><i class="far fa-plus-square"></i> 新增支出</a>
     </div>
   </div>
  

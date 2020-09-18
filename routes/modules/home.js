@@ -11,11 +11,19 @@ router.get('/', (req, res) => {
     .lean()
     .sort({ name: 'asc' })
     .then(record => {
-      // const categoryArr = []
-      // record.forEach(item => {
-      //   categoryArr.push(item.category)
-      // })
-      return res.render('index', { record, categories })
+      let totalAmount = Number()
+      record.forEach(item => {
+        totalAmount += Number(item.amount)
+      })
+      categories.find()
+        .lean()
+        .then(category => {
+          const newCategory = []
+          category.forEach(item => {
+            newCategory.push(item)
+          })
+          return res.render('index', { record, category: newCategory, totalAmount })
+        })
     })
     .catch(error => console.error(error))
 })
