@@ -4,6 +4,10 @@ const categorySchema = new Schema({
   name: {
     type: String,
     required: false
+  },
+  tag: {
+    type: String,
+    required: false
   }
 })
 

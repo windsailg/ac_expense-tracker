@@ -17,7 +17,7 @@ const recordSchema = new Schema({
     type: String,
     required: false
   },
-  totalAmount: {
+  tag: {
     type: String,
     required: false
   }

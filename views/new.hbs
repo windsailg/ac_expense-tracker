@@ -1,0 +1,88 @@
+
+<div class="container mb-5" >
+
+  <div class="row mt-4 mb-4">
+    <div class="col-md-10 mx-auto">
+        <h2 class="mt-2 mb-2 font-weight-bold text-center">新 增 支 出</h2>
+        <a type="button" href="/" class="btn btn-warning btn-sm mt-3 "><i class="fas fa-arrow-alt-circle-left"></i>  Back</a>
+    </div>
+  </div>
+
+  <form action="/record" method="POST" class="row mb-5">
+
+    <div class="col-12 col-md-10 mx-auto p-5 shadow-lg">
+
+     <div class="form-group row">
+        <label for="staticEmail" class="col-sm-2 col-form-label">名稱<span class="tip">*</span></label>
+        <div class="col-sm-10">
+            <input type="text" aria-label="First name" class="form-control" placeholder="輸入開銷名稱" spellcheck="false" name="name" >
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="staticEmail" class="col-sm-2 col-form-label">類別<span class="tip">*</span></label>
+        <div class="col-sm-10">
+            <select name="category" value="" class="custom-select form-control" id="inputGroupSelect01">
+                <option value="選擇類別">選擇類別</option>
+                {{#each categories}}
+                <option value="{{this.name}}">{{this.name}}</option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+
+     <div class="form-group row">
+        <label for="staticEmail" class="col-sm-2 col-form-label">日期<span class="tip">*</span></label>
+        <div class="col-sm-10">
+            <input id="dateSelecter" type="text" aria-label="First name" class="form-control" placeholder="輸入開銷名稱" spellcheck="false" name="date" readonly>
+        </div>
+    </div>
+
+
+
+
+     <div class="form-group row">
+        <label for="staticEmail" class="col-sm-2 col-form-label">金額<span class="tip">*</span></label>
+        <div class="col-sm-10">
+            <input id="dateSelecter" type="text" aria-label="First name" class="form-control" placeholder="輸入開銷金額" spellcheck="false" name="amount" >
+        </div>
+    </div>
+      <button type="button" class="btn btn-secondary btn-lg btn-block shadow"  data-toggle="modal" data-target="#ModalNew" ><i class="far fa-plus-square"></i> Create</button>
+    
+    </div>
+
+    <div class="modal fade" id="ModalNew" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">新增確認</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            您確定要新增該筆餐廳資訊嗎?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="submit" class="btn btn-warning">確認新增</button>
+            </div>
+        </div>
+        </div>
+    </div>
+  </form>
+
+</div>
+
+
+<script>
+    const dateSelecter = document.querySelector('#dateSelecter')
+    const today = new Date()
+    const dateStr = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
+    dateSelecter.value = dateStr
+</script>
+
+
+
+
+

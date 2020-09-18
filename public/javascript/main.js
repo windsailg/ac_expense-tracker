@@ -1,15 +1,16 @@
 // delete restaurant  function
 document.querySelector('body').addEventListener('click', (e) => {
-  if (e.target.matches('.delete__restaurant__btn')) {
+  if (e.target.matches('.delete__record__btn')) {
     const id = e.target.dataset.id
-    document.delete_form.action = `/restaurant/${id}?_method=DELETE`
+    document.delete_form.action = `/record/${id}?_method=DELETE`
   }
-  if (e.target.matches('.delete__restaurant__btn')) {
+  if (e.target.matches('.delete__record__btn')) {
     const id = e.target.dataset.id
-    document.delete_form.action = `/restaurant/${id}?_method=DELETE`
+    document.delete_form.action = `/record/${id}?_method=DELETE`
   }
 })
 
+$('#dateSelecter').cxCalendar()
 AOS.init({
   once: true,
   duration: 400,

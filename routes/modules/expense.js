@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const records = require('../../models/record')
-
+const categories = require('../../models/category')
 // 搜尋篩選路由
 router.get('/', (req, res) => {
   const queryArr = req.query
@@ -74,62 +74,59 @@ router.get('/new', (req, res) => {
 
 // 新增頁面送出路由
 router.post('/', (req, res) => {
-  const { name, name_en, category, rating, area, location, google_map, phone, description, image } = req.body
+  const { name, category, date, amount } = req.body
   return records.create({
     name: name,
-    name_en: name_en,
     category: category,
-    rating: rating,
-    area: area,
-    location: location,
-    google_map: google_map,
-    phone: phone,
-    description: description,
-    image: image
+    date: date,
+    amount: amount
   })
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
 
 // 詳細頁面路由
-router.get('/:restaurant_id', (req, res) => {
-  const id = req.params.restaurant_id
-  return restaurants.findById(id)
+router.get('/:record_id', (req, res) => {
+  const id = req.params.record_id
+  return records.findById(id)
     .lean()
-    .then(restaurant => res.render('show', { restaurant }))
+    .then(record => res.render('show', { record }))
     .catch(error => console.error(error))
 })
 
 // 編輯頁面路由
-router.get('/:restaurant_id/edit', (req, res) => {
-  const id = req.params.restaurant_id
-  return restaurants.findById(id)
+router.get('/:record_id/edit', (req, res) => {
+  const id = req.params.record_id
+  return records.findById(id)
     .lean()
-    .then(restaurant => res.render('edit', { restaurant }))
+    .then(record => res.render('edit', { record }))
     .catch(error => console.log(error))
 })
 
 // 編輯頁面送出路由
-router.put('/:restaurant_id', (req, res) => {
-  const id = req.params.restaurant_id
-  const { name, name_en, category, rating, area, location, google_map, phone, description, image } = req.body
+router.put('/:record_id', (req, res) => {
+  const id = req.params.record_id
+  const { name, category, date, amount } = req.body
   console.log(req.body)
   return records.findById(id)
     .then(record => {
       record.name = name
+      record.category = category
+      record.date = date
+      record.amount = amount
       return record.save()
     })
     .then(() => {
-      return res.redirect(`/restaurant/${id}`)
+      return res.redirect(`/record/${id}`)
     })
     .catch(error => console.error(error))
 })
 
 // 刪除物件送出路由
-router.delete('/:restaurant_id', (req, res) => {
-  const id = req.params.restaurant_id
+router.delete('/:record_id', (req, res) => {
+  const id = req.params.record_id
   return records.findById(id)
-    .then(restaurant => restaurant.remove())
+    .then(record => record.remove())
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })

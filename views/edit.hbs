@@ -1,0 +1,135 @@
+
+<h1 class="mb-1 restaurant-show-title font-weight-bold">編 輯 餐 廳</h1>
+<div class="container mb-5" >
+
+  <div class="row mb-4">
+    <div class="col-md-10 mx-auto">
+      <a type="button" href="/" class="btn btn-danger btn-sm"><i class="fas fa-arrow-alt-circle-left"></i>  Back</a>
+    </div>
+  </div>
+
+  <form action="/restaurant/{{restaurant._id}}?_method=PUT" method="POST" class="row mb-5 ">
+    
+    <div class="col-12 col-md-10 mx-auto p-5 shadow-lg">
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">餐廳名稱</span>
+        </div>
+        
+        <input type="text" aria-label="First name" class="form-control" placeholder="輸入餐廳名稱" spellcheck="false" name="name" value="{{restaurant.name}}">
+        <input type="text" aria-label="Last name" class="form-control" placeholder="輸入餐廳英文名稱" spellcheck="false" name="name_en" value="{{restaurant.name_en}}">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">餐廳類型</span>
+        </div>
+        <input type="text" aria-label="First name" class="form-control" placeholder="輸入餐廳的料理類型" spellcheck="false" name="category" value="{{restaurant.category}}">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">餐廳評分</span>
+        </div>
+        <input type="text" aria-label="First name" class="form-control rating_number"  spellcheck="false" value="{{restaurant.rating}} 顆星" disabled="true">
+    </div>
+    <input type="range" class="custom-range form-control mt-3 mb-4" min="0" max="5" step="0.1" id="range" name="rating" value="{{restaurant.rating}}">
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">餐廳地址</span>
+        </div>
+        <select name="area" value="" class="custom-select col-md-2" id="inputGroupSelect01">
+            <option value="{{restaurant.area}}" selected>{{restaurant.area}}</option>
+            <option value="北部">北部</option>
+            <option value="中部">中部</option>
+            <option value="南部">南部</option>
+        </select>
+        <input type="text" aria-label="First name" class="form-control" placeholder="輸入餐廳地址" spellcheck="false" name="location" value="{{restaurant.location}}">
+        <input type="text" aria-label="Last name" class="form-control" placeholder="輸入Google Map 地圖網址" spellcheck="false" name="google_map" value="{{restaurant.google_map}}">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">餐廳電話</span>
+        </div>
+        
+        <input type="text" aria-label="First name" class="form-control" placeholder="輸入餐廳連絡電話" spellcheck="false" name="phone" value="{{restaurant.phone}}">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">餐廳介紹</span>
+        </div>
+        <textarea class="form-control" aria-label="餐廳介紹" placeholder="輸入餐廳介紹" spellcheck="false" name="description" value="{{restaurant.description}}" style="min-height: 100px;">{{restaurant.description}}</textarea>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">餐廳照片</span>
+        </div>
+        <input type="text" aria-label="First name" class="form-control image_input" placeholder="餐廳實景照片網址" spellcheck="false" name="image" value="{{restaurant.image}}">
+    </div>
+
+    <div class="row justify-content-center ">
+        <div class="card text-center" style="width: 18rem;">
+            <img src="{{restaurant.image}}" alt="{{restaurant.name}}" title="{{restaurant.name}}" style="max-width: 600px;" class="card-img-top image_show" >
+
+            <div class="card-footer text-muted ">
+                <h5 class="card-title">{{restaurant.name}}實景照片預覽</h5>
+            </div>
+        </div>
+    </div>
+
+        <img class="rounded mx-auto d-block mb-4 w-60" >
+
+        <button type="button" class="btn btn-warning btn-lg shadow" data-toggle="modal" data-target="#ModalSave" ><i class="fas fa-save"></i>  Save</button>
+        <button type="button" class="btn btn-outline-secondary btn-lg delete__restaurant__btn" data-toggle="modal" data-target="#ModalDelete" data-id="{{restaurant._id}}">Delete</button>
+    </div>
+
+    <div class="modal fade" id="ModalSave" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">儲存確認</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            您確定要儲存該筆餐廳資訊嗎?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="submit" class="btn btn-warning">確認儲存</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+  </form>
+
+</div>
+
+<script>
+    // user range input UX function
+const ratingText = document.querySelector('.rating_number')
+const ratingRanger = document.querySelector('.custom-range')
+
+ratingRanger.addEventListener('input', (e) => {
+  ratingText.value = e.target.value + ' 顆星'
+})
+
+
+// user image input UX function
+const imageInput = document.querySelector('.image_input')
+const imageShow = document.querySelector('.image_show')
+
+imageInput.addEventListener('input', (e) => {
+  imageShow.src = `${e.target.value}`
+})
+</script>
+
+
+
