@@ -7,18 +7,19 @@ const categories = require('../../models/category')
 // 搜尋篩選路由
 router.get('/', (req, res) => {
   const filterTarget = req.query.filterCategory
-  console.log(filterTarget)
   records.find()
     .lean()
     .then(record => {
-      let totalAmount = Number()
-      record.forEach(item => {
-        totalAmount += Number(item.amount)
-      })
       let filteredRecordArr = record.filter(item => {
         return item.category === filterTarget
       })
       if (!filteredRecordArr.length) filteredRecordArr = record
+
+      let filteredAmount = Number()
+      filteredRecordArr.forEach(item => {
+        filteredAmount += Number(item.amount)
+      })
+
       categories.find()
         .lean()
         .then(category => {
@@ -29,7 +30,7 @@ router.get('/', (req, res) => {
           return res.render('index', {
             record: filteredRecordArr,
             category: newCategory,
-            totalAmount,
+            totalAmount: filteredAmount,
             filterTarget
           })
         })

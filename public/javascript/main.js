@@ -10,6 +10,7 @@ document.querySelector('body').addEventListener('click', (e) => {
 })
 
 $('#dateSelecter').cxCalendar()
+
 AOS.init({
   once: true,
   duration: 400,
