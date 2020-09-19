@@ -4,17 +4,17 @@ const router = express.Router()
 const records = require('../../models/record')
 const categories = require('../../models/category')
 
-// 搜尋篩選路由
+// search
 router.get('/', (req, res) => {
   const filterTarget = req.query.filterCategory
   records.find()
     .lean()
     .then(record => {
+
       let filteredRecordArr = record.filter(item => {
         return item.category === filterTarget
       })
-      if (!filteredRecordArr.length) filteredRecordArr = record
-
+      if (filterTarget === 'filterNone') filteredRecordArr = record
       let filteredAmount = Number()
       filteredRecordArr.forEach(item => {
         filteredAmount += Number(item.amount)
@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
           return res.render('index', {
             record: filteredRecordArr,
             category: newCategory,
-            totalAmount: filteredAmount,
+            totalAmount: filteredAmount.toLocaleString('zh-TW', { currency: 'TWD' }),
             filterTarget
           })
         })
@@ -38,14 +38,14 @@ router.get('/', (req, res) => {
     .catch(error => console.error(error))
 })
 
-// 新增頁面路由
+// new
 router.get('/new', (req, res) => {
   categories.find()
     .lean()
     .then(category => res.render('new', { category }))
 })
 
-// 新增頁面送出路由
+// create new post
 router.post('/', (req, res) => {
   let { name, category, date, amount } = req.body
   if (!name.trim()) name = '未命名的支出'
@@ -63,7 +63,7 @@ router.post('/', (req, res) => {
     .catch(error => console.log(error))
 })
 
-// 編輯頁面路由
+// edit
 router.get('/:record_id/edit', (req, res) => {
   const id = req.params.record_id
   return records.findById(id)
@@ -78,7 +78,7 @@ router.get('/:record_id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-// 編輯頁面送出路由
+// edit put
 router.put('/:record_id', (req, res) => {
   const id = req.params.record_id
   let { name, category, date, amount } = req.body
@@ -101,7 +101,7 @@ router.put('/:record_id', (req, res) => {
     .catch(error => console.error(error))
 })
 
-// 刪除物件送出路由
+// delete
 router.delete('/:record_id', (req, res) => {
   const id = req.params.record_id
   return records.findById(id)

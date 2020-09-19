@@ -22,7 +22,11 @@ router.get('/', (req, res) => {
           category.forEach(item => {
             newCategory.push(item)
           })
-          return res.render('index', { record, category: newCategory, totalAmount })
+          return res.render('index', {
+            record,
+            category: newCategory,
+            totalAmount: totalAmount.toLocaleString('zh-TW', { currency: 'TWD' })
+          })
         })
     })
     .catch(error => console.error(error))
