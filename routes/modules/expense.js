@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
       let filteredRecordArr = record.filter(item => {
         return item.category === filterTarget
       })
-      if (filterTarget === 'filterNone') filteredRecordArr = record
+      if (filterTarget === '依照類別搜尋') filteredRecordArr = record
       let filteredAmount = Number()
       filteredRecordArr.forEach(item => {
         filteredAmount += Number(item.amount)
