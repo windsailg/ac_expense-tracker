@@ -27,7 +27,8 @@ db.once('open', () => {
     }))
     .then(user => {
       const userId = user._id
-      return Promise.all(Array.from({ length: 1 },
+      return Promise.all(Array.from(
+        { length: 1 },
         (_, i) => recordModel.create({
           name: '火鍋',
           category: '餐飲食品',
