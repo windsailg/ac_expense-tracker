@@ -9,6 +9,10 @@ const recordSchema = new Schema({
     type: String,
     required: false
   },
+  merchant: {
+    type: String,
+    required: false
+  },
   date: {
     type: String,
     required: false
@@ -20,6 +24,12 @@ const recordSchema = new Schema({
   tag: {
     type: String,
     required: false
+  },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    index: true,
+    required: true
   }
 })
 

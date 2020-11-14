@@ -1,0 +1,32 @@
+<div class="mt-5 mb-5">
+  <div class="col-lg-4 m-auto mb-5 max__width__500">
+    <div class="card card-body shadow transparent__card">
+      <h1 class="text-center mt-3">註冊帳號</h1>
+      {{> message}}
+      <form action="/users/register" method="POST">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" class="form-control" placeholder="Enter Name" value="{{ name }}">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="Enter Email" value="{{ email }}">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password" value="{{ password }}">
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
+            placeholder="Confirm Password" value="{{ confirmPassword }}">
+        </div>
+        <button type="submit" class="btn btn-secondary btn-block">Register</button>
+        <a href="/auth/facebook" class="btn btn-block color__fb">Facebook</a>
+      </form>
+      <p class="lead mt-4">
+        已有帳號了嗎? 立即<a href="/users/login" >登入</a>
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,46 @@
+body{
+    padding: 0;
+    position: relative;
+}
+body::before{
+    content: '';
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffffffc4;
+    z-index: -1;
+    margin:auto ;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    box-sizing: border-box;
+    background-image: url('/images/background.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    filter: blur(3px);
+    box-sizing: border-box;
+}
+
+body::after{
+    content: '';
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffffff8a;
+    z-index: -1;
+    margin:auto ;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    box-sizing: border-box;
+}
+
+
+
 .imagine{
     min-width: 70px;
     color: #56b9b4;
@@ -7,4 +50,27 @@
 }
 .form-control[readonly]{
     background-color:#ffffff
+}
+.max__width__500{
+    max-width: 500px;
+}
+.color__fb{
+    background-color: #2c78db;
+  }
+
+.color__fb:hover{
+    background-color: #458eee;
+}
+.color__fade{
+    color: #7e7e7e;
+    min-width: 25px;
+}
+.transparent__card{
+    background-color: #ffffffa2;
+}
+.shadow__user{
+    box-shadow: 0 0 15px #0000000c;
+}
+.btn-gray{
+    background-color: #7c7c7c;
 }

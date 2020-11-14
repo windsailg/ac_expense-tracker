@@ -1,37 +1,66 @@
 const express = require('express')
 const router = express.Router()
 
-const records = require('../../models/record')
-const categories = require('../../models/category')
+const recordModel = require('../../models/record')
+const categoryModel = require('../../models/category')
 
 // search
 router.get('/', (req, res) => {
-  const filterTarget = req.query.filterCategory
-  records.find()
+  const userId = req.user._id
+  const filterCategory = req.query.category
+  const filterMonth = req.query.month
+  const formState = 'show'
+  recordModel.find({ userId })
     .lean()
-    .then(record => {
-
-      let filteredRecordArr = record.filter(item => {
-        return item.category === filterTarget
+    .then(records => {
+      // filter result
+      let filteredRecordArr = []
+      let filterCategoryArr = []
+      const infos = []
+      filterCategoryArr = records.filter(item => {
+        const dateString = item.date
+        const dateTarget = filterMonth.slice(0, 1).padStart(2, '0')
+        if (filterCategory === '類別') {
+          return dateString.slice(5, 7) === dateTarget
+        } else if (filterMonth === '月份') {
+          return item.category === filterCategory
+        }
+        return item.category === filterCategory && dateString.slice(5, 7) === dateTarget
       })
-      if (filterTarget === '依照類別搜尋') filteredRecordArr = record
+      filteredRecordArr = filterCategoryArr
+      if (!filteredRecordArr.length) {
+        infos.push({ message: '查詢無結果' })
+        // filteredRecordArr = records
+      }
+
+      // filter amount block
       let filteredAmount = Number()
-      filteredRecordArr.forEach(item => {
-        filteredAmount += Number(item.amount)
+      filteredRecordArr.forEach(record => {
+        filteredAmount += Number(record.amount)
       })
-
-      categories.find()
+      categoryModel.find()
         .lean()
-        .then(category => {
-          const newCategory = []
-          category.forEach(item => {
-            newCategory.push(item)
-          })
+        .then(categories => {
+          // filter list
+          const filterMonthList = []
+          let count = 1
+          while (count <= 13) {
+            filterMonthList.push(count + '月')
+            count++
+          }
+          const newCategories = categories.filter(category => category.name !== filterCategory)
+          const newMonth = filterMonthList.filter(month => month !== filterMonth)
           return res.render('index', {
+            infos,
+            formState,
             record: filteredRecordArr,
-            category: newCategory,
+            category: newCategories,
+            month: newMonth,
             totalAmount: filteredAmount.toLocaleString('zh-TW', { currency: 'TWD' }),
-            filterTarget
+            filterCategory,
+            filterMonth,
+            filterCategoryVal: filterCategory,
+            filterMonthVal: filterMonth
           })
         })
     })
@@ -40,24 +69,30 @@ router.get('/', (req, res) => {
 
 // new
 router.get('/new', (req, res) => {
-  categories.find()
+  categoryModel.find()
     .lean()
-    .then(category => res.render('new', { category }))
+    .then(category => {
+      req.flash('warning_msg', '已成功新增')
+      return res.render('new', { category })
+    })
 })
 
-// create new post
+// post new
 router.post('/', (req, res) => {
-  let { name, category, date, amount } = req.body
+  const userId = req.user._id
+  let { name, category, merchant, date, amount } = req.body
   if (!name.trim()) name = '未命名的支出'
   if (!amount.trim()) amount = '0'
   let categoryArr = []
   categoryArr = categoryArr.concat(category.split(','))
-  return records.create({
-    name: name,
+  return recordModel.create({
+    name,
     category: categoryArr[0],
-    date: date,
-    amount: amount,
-    tag: categoryArr[1]
+    merchant,
+    date,
+    amount,
+    tag: categoryArr[1],
+    userId
   })
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
@@ -65,12 +100,14 @@ router.post('/', (req, res) => {
 
 // edit
 router.get('/:record_id/edit', (req, res) => {
-  const id = req.params.record_id
-  return records.findById(id)
+  const userId = req.user._id
+  const _id = req.params.record_id
+  return recordModel.findOne({ _id, userId })
     .lean()
     .then(record => {
-      categories.find()
-        .lean().then(categoryItem => {
+      categoryModel.find()
+        .lean()
+        .then(categoryItem => {
           const newCategories = categoryItem.filter(ele => ele.name !== record.category)
           res.render('edit', { record, categories: newCategories })
         })
@@ -78,18 +115,21 @@ router.get('/:record_id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-// edit put
+// post edit
 router.put('/:record_id', (req, res) => {
-  const id = req.params.record_id
-  let { name, category, date, amount } = req.body
+  const userId = req.user._id
+  const _id = req.params.record_id
+  let { name, category, merchant, date, amount } = req.body
   if (!name.trim()) name = '未命名的支出'
+  // if (!merchant.trim()) merchant = ''
   if (!amount.trim()) amount = '0'
   let categoryArr = []
   categoryArr = categoryArr.concat(category.split(','))
-  return records.findById(id)
+  return recordModel.findOne({ _id, userId })
     .then(record => {
       record.name = name
       record.category = categoryArr[0]
+      record.merchant = merchant
       record.date = date
       record.amount = amount
       record.tag = categoryArr[1]
@@ -103,9 +143,10 @@ router.put('/:record_id', (req, res) => {
 
 // delete
 router.delete('/:record_id', (req, res) => {
-  const id = req.params.record_id
-  return records.findById(id)
-    .then(record => record.remove())
+  const userId = req.user._id
+  const _id = req.params.record_id
+  return recordModel.findOne({ _id, userId })
+    .then(records => records.remove())
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })

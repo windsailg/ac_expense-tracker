@@ -10,7 +10,7 @@
 
   <form action="/record" method="POST" class="row mb-5">
 
-    <div class="col-12 col-md-10 mx-auto p-5 shadow-lg">
+    <div class="col-12 col-md-10 mx-auto p-5 shadow-lg transparent__card">
 
     <div class="row ml-1 mb-1 text-muted">
       <label for="validationServer01 ">
@@ -38,16 +38,23 @@
     </div>
 
      <div class="form-group row">
+        <label for="staticEmail" class="col-sm-2 col-form-label">店家</label>
+        <div class="col-sm-10">
+            <input type="text" aria-label="First name" class="form-control" placeholder="輸入店家名稱" spellcheck="false" name="merchant" >
+        </div>
+    </div>
+
+     <div class="form-group row">
         <label for="staticEmail" class="col-sm-2 col-form-label">日期<span class="tip text-secondary font-weight-bold"> *</span></label>
         <div class="col-sm-10">
-            <input id="dateSelecter" type="text" aria-label="First name" class="form-control" placeholder="輸入開銷名稱" spellcheck="false" name="date" readonly>
+            <input id="dateSelecter" type="text" aria-label="First name" class="form-control" placeholder="輸入日期" spellcheck="false" name="date" readonly>
         </div>
     </div>
 
     <div class="form-group row">
         <label for="staticEmail" class="col-sm-2 col-form-label">金額<span class="tip text-secondary font-weight-bold"> *</span></label>
         <div class="col-sm-10">
-            <input id="dateSelecter" type="text" aria-label="First name" class="form-control" placeholder="輸入開銷金額" spellcheck="false" name="amount" oninput="value=value.replace(/[^\d]/g,'')">
+            <input  type="text" aria-label="First name" class="form-control" placeholder="輸入開銷金額" spellcheck="false" name="amount" oninput="value=value.replace(/[^\d]/g,'')">
         </div>
     </div>
 

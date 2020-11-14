@@ -1,13 +1,14 @@
 const express = require('express')
 const router = express.Router()
 
-const records = require('../../models/record')
-const categories = require('../../models/category')
+const recordModel = require('../../models/record')
+const categoryModel = require('../../models/category')
 
 router.use(express.static('public'))
 
 router.get('/', (req, res) => {
-  records.find()
+  const userId = req.user._id
+  recordModel.find({ userId })
     .lean()
     .sort({ name: 'asc' })
     .then(record => {
@@ -15,16 +16,20 @@ router.get('/', (req, res) => {
       record.forEach(item => {
         totalAmount += Number(item.amount)
       })
-      categories.find()
+      categoryModel.find()
         .lean()
         .then(category => {
-          const newCategory = []
-          category.forEach(item => {
-            newCategory.push(item)
-          })
+          // filter list
+          const filterMonthList = []
+          let count = 1
+          while (count <= 13) {
+            filterMonthList.push(count + '月')
+            count++
+          }
           return res.render('index', {
             record,
-            category: newCategory,
+            category,
+            month: filterMonthList,
             totalAmount: totalAmount.toLocaleString('zh-TW', { currency: 'TWD' })
           })
         })

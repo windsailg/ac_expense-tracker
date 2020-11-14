@@ -19,10 +19,21 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
     <div class="container flex-justify-between">
       <a class="navbar-brand" href="/">
-        <i class="fas fa-user-secret mr-1"></i>
+        <i class="fab fa-redhat"></i>
         老爸的私房帳戶
       </a>
-      <a type="button" href="/record/new" class="btn btn-secondary btn-sm"><i class="far fa-plus-square"></i> 新增支出</a>
+        </a>
+        {{#if isAuthenticated}}
+          <button class="btn btn-warning" data-toggle="modal" data-target="#ModalLogout">
+            <i class="fas fa-sign-out-alt"></i> 登出
+          </button>
+          
+        {{else}}
+          <a href="/users/login" class="user__login">
+            <i class="far fa-user-circle"></i>
+          </a>
+      {{/if}}
+      
     </div>
   </nav>
 
@@ -30,11 +41,11 @@
 </header>
     {{{ body }}}
 
-  <div class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitleDelete" aria-hidden="true">
     <div class="modal-dialog modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalCenterTitle">刪除確認</h5>
+          <h5 class="modal-title" id="ModalCenterTitleDelete">刪除確認</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -53,7 +64,27 @@
     </div>
   </div>
 
-  <div class="mb-5 p-2"></div>
+  <div class="modal fade" id="ModalLogout" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitleLogout" aria-hidden="true">
+    <div class="modal-dialog modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ModalCenterTitleLogout">登出確認</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          您確定要登出嗎?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
+            <a href="/users/logout" class="btn btn-secondary">確認登出</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="p-5 m-3"></div>
+
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>

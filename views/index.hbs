@@ -1,35 +1,56 @@
 <!-- search bar -->
 <div class="container search-bar mt-5">
-
+{{> message}}
 
   <div class="container  mb-5">
     <p class="lead font-weight-bold">開銷總金額：</p>
     <h1 class="display-4 text-muted">$ {{totalAmount}}</h1>
   </div>
 
+  <button class="btn btn-primary shadow " type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    <i class="fas fa-sort-amount-down"></i> 條件篩選
+  </button>
 
-  <form action="/search" class="search__form">
-    
-    <div class="input-group ">
 
-      <div class="dropdown shadow sorter">
-        <button class="btn btn-info btn-block dropdown-toggle sorter__text" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{#if filterTarget}}
-            {{filterTarget}}
-            {{else}}
-            依照類別搜尋
-          {{/if}}
-        </button>
-        <div type="submit" class="dropdown-menu" aria-labelledby="dropdownMenu2">
-          <button name="filterCategory" value="依照類別搜尋" class="dropdown-item">選擇開銷類型</button>
-          <div class="dropdown-divider"></div>
-          {{#each category}}
-            <button name="filterCategory" value="{{ this.name }}" class="dropdown-item">{{ this.name }}</button>
-          {{/each}}
+  <form id="collapseExample" name="formState" action="/search" class="search__form collapse mt-3 mb-3 {{formState}}">
+
+      <div class="form-row">
+        
+        <div class="form-group col-md-2">
+          <select name="category" value="" class="form-control">
+          {{#if filterCategory}}
+              <option selected>{{filterCategory}}</option>
+              {{else}}
+              <option selected>類別</option>
+              
+            {{/if}}
+            {{#each category}}
+              <option value="{{ this.name }}" class="dropdown-item"> {{ this.name }}</option>
+            {{/each}}
+          </select>
         </div>
+
+        <div class="form-group col-md-2">
+          <select name="month" value="" class="form-control">
+            {{#if filterMonth}}
+              <option selected>{{filterMonth}}</option>
+              {{else}}
+              <option selected>月份</option>
+            {{/if}}
+            {{#each month}}
+              <option value="{{ this }}" class="dropdown-item">{{ this }}</option>
+            {{/each}}
+          </select>
+        </div>
+        <div class="form-group col-md-6">
+          <button type="submit" class="btn btn-primary mr-1 ">　篩選　</button>
+          <a href="/" name="clear" value="true" class="btn mr-1 btn-gray">清除</a>
+        </div>
+        
+        
       </div>
+        
       
-    </div>
 
   </form>
 
@@ -42,20 +63,27 @@
         <ul class="list-group">
         {{#each record}}
 
-          <li class="list-group-item" data-aos="fade-left">
+          <li class="list-group-item mb-2 mt-2 shadow__user transparent__card" data-aos="fade-left">
 
             <div class="row align-items-center">
 
               <div class="row col-10 mr-auto align-items-center">
 
                 <div class="row col-md-9">
+
                   <h3 class="col-auto pl-3 pt-2 imagine text-center text-info " title="{{this.category}}">
                     <i class="{{this.tag}}"></i>
                   </h3>
+
                   <div class="col-md-8">
-                    <big class=" font-weight-bold font-size-6">{{this.name}}</big>
+
+                    <big class="font-weight-bold font-size-6 row justify-content-start pl-3">{{this.name}} 
+                      {{!-- <div class="font-weight-normal  font-size-3 ">　{{this.merchant}}</div> --}}
+                    </big>
+
                     <div class=" font-weight-light">{{this.date}}</div>
                   </div>
+
                 </div>
 
                 <div class="col-md-3">

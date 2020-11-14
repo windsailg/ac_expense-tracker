@@ -3,9 +3,15 @@ const router = express.Router()
 
 const home = require('./modules/home')
 const record = require('./modules/expense')
+const users = require('./modules/user')
+const auth = require('./modules/auth')
 
-router.use('/', home)
-router.use('/search', record)
-router.use('/record', record)
+const { authenticator } = require('../middleware/auth')
+
+router.use('/search', authenticator, record)
+router.use('/record', authenticator, record)
+router.use('/users', users)
+router.use('/auth', auth)
+router.use('/', authenticator, home)
 
 module.exports = router
