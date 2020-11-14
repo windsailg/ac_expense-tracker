@@ -6,11 +6,20 @@
 使用前需登入
 
 
-帳號
+DEMO:
+
+
+https://fathers-private-account.herokuapp.com/
+
+
+帳號:
+
 
 imfather@example.tw
 
-密碼
+
+密碼:
+
 
 8888
 
