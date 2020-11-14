@@ -12,8 +12,8 @@ const db = require('../../config/mongoose')
 
 const SEED_USER_1 = {
   name: 'Father',
-  email: 'imfather@123.tw',
-  password: '123'
+  email: 'imfather@example.tw',
+  password: '8888'
 }
 
 db.once('open', () => {
