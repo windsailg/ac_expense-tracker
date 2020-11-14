@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
           // filter list
           const filterMonthList = []
           let count = 1
-          while (count <= 13) {
+          while (count <= 12) {
             filterMonthList.push(count + '月')
             count++
           }
