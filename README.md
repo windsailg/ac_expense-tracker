@@ -62,10 +62,10 @@ imfather@example.tw
 1.開啟終端機(Terminal) cd 到存放專案本機位置並執行:
 
 ```
-git clone https://github.com/windsailg/ac_restaurant_list-crud.git
+git clone https://github.com/windsailg/ac_expense-tracker.git
 ``````
 
-2.cd 至 ac_restaurant_list-crud 資料夾
+2.cd 至 ac_expense-tracker.git 資料夾
 
 
 3.初始化安裝套件

@@ -10,6 +10,8 @@ router.get('/', (req, res) => {
   const filterCategory = req.query.category
   const filterMonth = req.query.month
   const formState = 'show'
+  // npm install standard --global
+  console.log(filterMonth)
   recordModel.find({ userId })
     .lean()
     .then(records => {
@@ -17,20 +19,25 @@ router.get('/', (req, res) => {
       let filteredRecordArr = []
       let filterCategoryArr = []
       const infos = []
-      filterCategoryArr = records.filter(item => {
-        const dateString = item.date
-        const dateTarget = filterMonth.slice(0, 1).padStart(2, '0')
-        if (filterCategory === '類別') {
-          return dateString.slice(5, 7) === dateTarget
-        } else if (filterMonth === '月份') {
-          return item.category === filterCategory
+      filterCategoryArr = records.filter(record => {
+        let dateTarget
+        const recordDate = new Date(record.date).getMonth() + 1
+        if (filterMonth.length === 3) {
+          dateTarget = filterMonth.slice(0, 2)
+        } else {
+          dateTarget = filterMonth.slice(0, 1)
         }
-        return item.category === filterCategory && dateString.slice(5, 7) === dateTarget
+        if (filterCategory === '類別') {
+          console.log(recordDate, dateTarget)
+          return String(recordDate) === dateTarget
+        } else if (filterMonth === '月份') {
+          return record.category === filterCategory
+        }
+        return record.category === filterCategory && String(recordDate) === dateTarget
       })
       filteredRecordArr = filterCategoryArr
       if (!filteredRecordArr.length) {
         infos.push({ message: '查詢無結果' })
-        // filteredRecordArr = records
       }
 
       // filter amount block
