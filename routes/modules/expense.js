@@ -6,40 +6,41 @@ const categoryModel = require('../../models/category')
 
 // search
 router.get('/', (req, res) => {
-  const userId = req.user._id
-  const filterCategory = req.query.category
-  const filterMonth = req.query.month
   const formState = 'show'
-  // npm install standard --global
-  console.log(filterMonth)
-  recordModel.find({ userId })
+  const filterCategory = req.query.category
+
+  // Get filter target - month
+  const filterMonth = req.query.month
+  const filterElement = {
+    userId: req.user._id
+  }
+
+  if (filterCategory !== '類別') {
+    filterElement.category = filterCategory
+  }
+  recordModel.find(filterElement)
     .lean()
     .then(records => {
       // filter result
       let filteredRecordArr = []
-      let filterCategoryArr = []
-      const infos = []
-      filterCategoryArr = records.filter(record => {
-        let dateTarget
-        const recordDate = new Date(record.date).getMonth() + 1
-        if (filterMonth.length === 3) {
-          dateTarget = filterMonth.slice(0, 2)
-        } else {
-          dateTarget = filterMonth.slice(0, 1)
-        }
-        if (filterCategory === '類別') {
-          console.log(recordDate, dateTarget)
+      if (filterCategory !== '月份') {
+        filteredRecordArr = records.filter(record => {
+          let dateTarget = ''
+          const recordDate = new Date(record.date).getMonth() + 1
+          if (filterMonth.length === 3) {
+            dateTarget = filterMonth.slice(0, 2)
+          } else {
+            dateTarget = filterMonth.slice(0, 1)
+          }
           return String(recordDate) === dateTarget
-        } else if (filterMonth === '月份') {
-          return record.category === filterCategory
-        }
-        return record.category === filterCategory && String(recordDate) === dateTarget
-      })
-      filteredRecordArr = filterCategoryArr
+        })
+      } else {
+        filteredRecordArr = records
+      }
+      const infos = []
       if (!filteredRecordArr.length) {
         infos.push({ message: '查詢無結果' })
       }
-
       // filter amount block
       let filteredAmount = Number()
       filteredRecordArr.forEach(record => {
