@@ -18,6 +18,7 @@ router.get('/', (req, res) => {
   if (filterCategory !== '類別') {
     filterElement.category = filterCategory
   }
+
   recordModel.find(filterElement)
     .lean()
     .then(records => {
