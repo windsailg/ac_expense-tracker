@@ -21,7 +21,7 @@
           {{#if filterCategory}}
               <option selected>{{filterCategory}}</option>
               {{else}}
-              <option selected>類別</option>
+              <option value="" disabled selected>類別</option>
               
             {{/if}}
             {{#each category}}
@@ -35,7 +35,7 @@
             {{#if filterMonth}}
               <option selected>{{filterMonth}}</option>
               {{else}}
-              <option selected>月份</option>
+              <option value="" disabled selected>月份</option>
             {{/if}}
             {{#each month}}
               <option value="{{ this }}" class="dropdown-item">{{ this }}</option>
