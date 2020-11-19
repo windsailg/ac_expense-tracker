@@ -14,16 +14,15 @@ router.get('/', (req, res) => {
   const filterElement = {
     userId: req.user._id
   }
+  console.log(filterCategory, filterMonth)
 
-  if (filterCategory !== '類別') {
-    filterElement.category = filterCategory
-  }
+  if (filterCategory) filterElement.category = filterCategory
   recordModel.find(filterElement)
     .lean()
     .then(records => {
       // filter result
       let filteredRecordArr = []
-      if (filterMonth !== '月份') {
+      if (filterMonth) {
         filteredRecordArr = records.filter(record => {
           let dateTarget = ''
           const recordDate = new Date(record.date).getMonth() + 1
@@ -38,7 +37,6 @@ router.get('/', (req, res) => {
         filteredRecordArr = records
       }
 
-      console.log(filteredRecordArr)
       const infos = []
       if (!filteredRecordArr.length) {
         infos.push({ message: '查詢無結果' })
